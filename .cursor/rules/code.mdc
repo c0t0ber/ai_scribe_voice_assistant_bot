@@ -1,0 +1,76 @@
+---
+description: 
+globs: 
+alwaysApply: true
+---
+# Python Agent Development Rules
+
+## Environment & Setup
+
+- Review the [pyproject.toml](mdc:pyproject.toml) to identify Python version requirements and dependencies
+- Use the latest Python features without concern for backward compatibility
+- Use UV exclusively for dependency management
+- Use [justfile](mdc:justfile) for easy command management
+- After code changes, always run:
+  ```bash
+  just fmt
+  just lint
+  ```
+- When modifying dependencies:
+  ```bash
+  just update-deps
+  just install-deps
+  ```
+
+## Type Annotations
+
+- Add type hints for all variables, parameters, and return values
+- Type annotations will be checked by mypy
+- If you're unsure about the correct type, use `Any` from `typing` module
+- Let the user add type ignores if necessary
+
+## Documentation
+
+- Write comprehensive docstrings for all modules, classes, functions, and methods
+- Follow documentation format conventions (Google style or similar)
+- Document your changes in [CHANGELOG.md](mdc:CHANGELOG.md), explaining:
+  - What was changed
+  - Why it was changed
+  - How it affects existing functionality
+
+## Logging
+
+- Create module-specific loggers:
+  ```python
+  import logging
+  logger = logging.getLogger(__name__)
+  ```
+- Log useful information at appropriate levels
+- Always use `logger.exception()` for error logging to capture stack traces:
+  ```python
+  try:
+      # code
+  except Exception:
+      logger.exception("Error occurred while processing data")
+      raise
+  ```
+
+## File System Operations
+
+- Always use `pathlib` instead of `os.path`:
+  ```python
+  from pathlib import Path
+  
+  data_path = Path("data") / "config.json"
+  if data_path.exists():
+      with data_path.open() as f:
+          # process file
+  ```
+
+## Best Practices
+
+- Implement proper error handling with context managers
+- Follow project-specific code organization patterns
+- Keep functions small and focused on a single responsibility
+- Use pure functions that don't modify state and produce consistent outputs for the same inputs
+- Minimize class usage - use them only when truly necessary, always prefer composition over inheritance

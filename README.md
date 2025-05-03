@@ -13,83 +13,65 @@ A Telegram bot that processes audio files and voice messages using ElevenLabs fo
 
 ### Using Docker (Recommended)
 
-1. Clone this repository:
-```bash
-git clone https://github.com/yourusername/ai_voice_assistant.git
-cd ai_voice_assistant
-```
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/ai_scribe_voice_assistant_bot.git
+   cd ai_scribe_voice_assistant_bot
+   ```
 
-2. Create a `.env` file:
-```bash
-cp .env.example .env
-```
+2. Create a `.env` file with your configuration:
+   ```bash
+   cp .env.example .env
+   # Edit the .env file with your API keys and settings
+   ```
 
-3. Edit the `.env` file and add your:
-   - Telegram Bot Token (get it from @BotFather)
-   - ElevenLabs API Key (get it from https://elevenlabs.io)
-
-4. Start the bot using Docker Compose:
-```bash
-docker-compose up -d
-```
+3. Build and start the Docker container:
+   ```bash
+   docker-compose up -d
+   ```
 
 ### Manual Installation
 
-1. Clone this repository:
-```bash
-git clone https://github.com/yourusername/ai_voice_assistant.git
-cd ai_voice_assistant
-```
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/yourusername/ai_scribe_voice_assistant_bot.git
+   cd ai_scribe_voice_assistant_bot
+   ```
 
-2. Create and activate a virtual environment:
-```bash
-uv venv
-source .venv/bin/activate  # On Windows: .venv\Scripts\activate
-```
+2. Create and activate a virtual environment using UV:
+   ```bash
+   just init-venv
+   source .venv/bin/activate
+   ```
 
 3. Install dependencies:
-```bash
-uv pip install -e .
-```
+   ```bash
+   just install-deps
+   ```
 
-4. Create and configure `.env` file as described above
+4. Create a `.env` file with your configuration:
+   ```bash
+   cp .env.example .env
+   # Edit the .env file with your API keys and settings
+   ```
 
 ## Usage
 
-1. Start the bot:
-```bash
-# If using Docker
-docker-compose up -d
+### Running with Docker
 
-# If running manually
-python -m ai_voice_assistant.bot
+```bash
+docker compose up -d
 ```
 
-2. In Telegram:
-   - Send `/start` to initialize the bot
-   - Send an audio file or voice message
-   - The bot will process it and send back the transcription
+### Running manually
 
-## Development
-
-The project uses:
-- Python 3.12+
-- UV for package management
-- Ruff for linting
-- Just for task automation
-
-Common development tasks:
 ```bash
-just fmt # Format code
+just run
 ```
 
-## Requirements
+## Bot Commands
 
-- Python 3.12 or higher
-- Telegram Bot Token
-- ElevenLabs API Key
-- Docker (optional, for containerized deployment)
-
-## License
-
-MIT
+- `/start` - Start the bot and display help information
+- `/help` - Show help message
+- `/model <model_name>` - Change the LLM model
+- `/prompt <prompt_text>` - Change the prompt template

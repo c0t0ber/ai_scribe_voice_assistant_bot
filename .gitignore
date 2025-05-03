@@ -29,3 +29,4 @@ coverage*
 venv
 
 .qodo
+uv.lock

@@ -151,9 +151,16 @@ class VoiceAssistantBot:
         def _read_file_and_transcribe() -> SpeechToTextChunkResponseModel:
             with open(audio_path, "rb") as audio_file:
                 audio_data = audio_file.read()
-                return self.elevenlabs_client.speech_to_text.convert(
-                    file=audio_data, model_id="scribe_v1", tag_audio_events=False, diarize=False
+                transcription = self.elevenlabs_client.speech_to_text.convert(
+                    file=audio_data,
+                    model_id="scribe_v1",
+                    tag_audio_events=True,
+                    language_code="ru",
+                    diarize=True,
+                    # это баг в elevenlabs, пока работает только так
+                    additional_formats='[{"format": "txt"}]',  # type: ignore
                 )
+                return transcription.additional_formats[0].content  # type: ignore
 
         result = await asyncio.get_event_loop().run_in_executor(None, _read_file_and_transcribe)
 

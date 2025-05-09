@@ -3,7 +3,6 @@ import logging
 from pathlib import Path
 from typing import Optional
 
-from elevenlabs import SpeechToTextChunkResponseModel
 from elevenlabs.client import ElevenLabs
 from openai import OpenAI
 from openai.types.chat import ChatCompletion
@@ -148,24 +147,30 @@ class VoiceAssistantBot:
     async def transcribe_audio(self, audio_path: Path) -> str:
         logger.info("Starting transcription with ElevenLabs")
 
-        def _read_file_and_transcribe() -> SpeechToTextChunkResponseModel:
+        def _read_file_and_transcribe() -> str:
             with open(audio_path, "rb") as audio_file:
                 audio_data = audio_file.read()
-                transcription = self.elevenlabs_client.speech_to_text.convert(
-                    file=audio_data,
-                    model_id="scribe_v1",
-                    tag_audio_events=True,
-                    #language_code="ru", # чтобы не ограничиваться только русским языком
-                    diarize=True,
-                    # это баг в elevenlabs, пока работает только так
-                    additional_formats='[{"format": "txt"}]',  # type: ignore
-                )
-                return transcription.additional_formats[0].content  # type: ignore
+                try:
+                    transcription = self.elevenlabs_client.speech_to_text.convert(
+                        file=audio_data,
+                        model_id="scribe_v1",
+                        tag_audio_events=True,
+                        #language_code="ru", # чтобы не ограничиваться только русским языком
+                        diarize=True,
+                        # это баг в elevenlabs, пока работает только так
+                        additional_formats='[{"format": "txt"}]',  # type: ignore
+                    )
+                    result = transcription.additional_formats[0].content  # type: ignore
+                    return result
+                except Exception as e:
+                    logger.exception(f"Error transcribing audio: {str(e)}")
+                    raise
+
 
         result = await asyncio.get_event_loop().run_in_executor(None, _read_file_and_transcribe)
 
         logger.info("Successfully transcribed audio")
-        return result.text or ""
+        return result
 
     async def download_file(self, file_id: str, bot: Bot) -> Path:
         logger.info(f"Starting download of file {file_id}")

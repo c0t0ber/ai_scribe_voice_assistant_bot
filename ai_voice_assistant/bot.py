@@ -155,7 +155,7 @@ class VoiceAssistantBot:
                     file=audio_data,
                     model_id="scribe_v1",
                     tag_audio_events=True,
-                    language_code="ru",
+                    #language_code="ru", # чтобы не ограничиваться только русским языком
                     diarize=True,
                     # это баг в elevenlabs, пока работает только так
                     additional_formats='[{"format": "txt"}]',  # type: ignore

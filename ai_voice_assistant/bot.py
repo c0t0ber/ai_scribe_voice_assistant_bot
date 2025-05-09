@@ -59,7 +59,7 @@ class VoiceAssistantBot:
         self.settings = Settings()
         self.settings.TEMP_DIR.mkdir(exist_ok=True)
 
-        self.elevenlabs_client = ElevenLabs(api_key=self.settings.ELEVENLABS_API_KEY)
+        self.elevenlabs_client = ElevenLabs(api_key=self.settings.ELEVENLABS_API_KEY, timeout=60*5)
         self.openai_client = OpenAI(api_key=self.settings.OPENAI_API_KEY, base_url=self.settings.LLM_BASE_URL or None)
 
     def run(self) -> None:
